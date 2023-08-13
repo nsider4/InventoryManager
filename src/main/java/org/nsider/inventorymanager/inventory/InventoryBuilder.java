@@ -12,7 +12,7 @@ import org.nsider.inventorymanager.item.ItemData;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
+/*
  * The InventoryBuilder class is used to create custom inventories and add items to them.
  */
 public class InventoryBuilder {
@@ -24,7 +24,7 @@ public class InventoryBuilder {
     @Getter @Setter private String inventoryName;
     @Getter @Setter private int inventorySize;
 
-    /**
+    /*
      * Constructs an InventoryBuilder with the specified name and size.
      *
      * @param inventoryName The name of the inventory.
@@ -38,7 +38,7 @@ public class InventoryBuilder {
         this.inventory = Bukkit.createInventory(null, inventorySize, inventoryName);
     }
 
-    /**
+    /*
      * Adds an item to the inventory.
      *
      * @param data The ItemData containing information about the item to be added.
@@ -48,7 +48,7 @@ public class InventoryBuilder {
         itemDataList.add(data);
     }
 
-    /**
+    /*
      * Clears the inventory and adds the items from the itemsMap to their respective slots.
      * This method should be called before opening the inventory for a player.
      */
@@ -79,11 +79,33 @@ public class InventoryBuilder {
         itemDataList.clear();
     }
 
+    /*
+     * Finds the ItemData with the specified name.
+     *
+     * @param targetName The name to look for in the data.
+     * @return The ItemData containing information about the item.                
+     */
     public Optional<ItemData> getItemDataWithName(String targetName) {
         return itemDataList.stream()
                 .filter(itemData -> itemData.getName().equals(targetName))
                 .findFirst();
     }
+
+    /*
+     * Updates an item with the updated data
+     *
+     * @param data The ItemData containing information about the item
+     */
+    public void updateItemFromData(ItemData data) {
+        long id = data.getID();
+
+        ItemStack item = ItemBuilder.getItemForId(id);
+        if(item != null) {
+            itemsMap.remove(item);
+            itemsMap.put(ItemBuilder.fromItemData(data), data.getSlots());
+        }
+    }
+
 
     public void openInventory(Player p) {
         p.openInventory(inventory);
