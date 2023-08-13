@@ -11,6 +11,7 @@ public class ItemData {
     private List<String> lore;
     private String material;
     private int amount;
+    private long ID;
     private List<Integer> slots;
 
     public ItemData() {
