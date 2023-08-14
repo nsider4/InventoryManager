@@ -2,7 +2,6 @@
 
 [![](https://jitpack.io/v/nsider4/InventoryManager.svg)](https://jitpack.io/#nsider4/InventoryManager)
 #
-
 - Supports 1.8 to 1.20
 - Doesen't use any external API to make itself work, no dependencies
 - Supports numerical id's as well as Material name from any version
