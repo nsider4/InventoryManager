@@ -1,6 +1,8 @@
 # InventoryManager | The perfect API to optimize inventory management!
 
+#
 [![](https://jitpack.io/v/nsider4/InventoryManager.svg)](https://jitpack.io/#nsider4/InventoryManager)
+#
 
 - Supports 1.8 to 1.20
 - Doesen't use any external API to make itself work, no dependencies
@@ -12,7 +14,7 @@
 # TO-DO List
 - Adding support to use a normal inventory as basis for a per player inventory.
 
-
+#
 
 Maven:
 ```XML
