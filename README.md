@@ -1,6 +1,5 @@
 # InventoryManager | The perfect API to optimize inventory management!
 
-#
 [![](https://jitpack.io/v/nsider4/InventoryManager.svg)](https://jitpack.io/#nsider4/InventoryManager)
 #
 
