@@ -13,13 +13,13 @@
 - Adding support to use a normal inventory as basis for a per player inventory.
 
 Maven:
-```
+```XML
 <repository>
     <id>jitpack.io</id>
     <url>https://jitpack.io</url>
 </repository>
 ```
-```
+```XML
 <dependency>
     <groupId>com.github.nsider4</groupId>
     <artifactId>InventoryManager</artifactId>
@@ -29,13 +29,13 @@ Maven:
 ```
 
 Gradle:
-```
+```XML
 repositories {
 	  ...
 	  maven { url 'https://jitpack.io' }
 }
 ```
-```
+```XML
 dependencies {
 	  implementation 'com.github.nsider4:InventoryManager:0.9'
 }
