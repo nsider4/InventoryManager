@@ -31,13 +31,13 @@ Maven:
 ```
 
 Gradle:
-```XML
+```GRADLE
 repositories {
 	  ...
 	  maven { url 'https://jitpack.io' }
 }
 ```
-```XML
+```GRADLE
 dependencies {
 	  implementation 'com.github.nsider4:InventoryManager:0.9'
 }
