@@ -10,7 +10,7 @@
 
 
 # TO-DO List
-- Adding support to use a normal inventory as basis for a per player inventory.
+- Adding support to use a normal inventory as base for a per player inventory.
 
 #
 
@@ -42,3 +42,6 @@ dependencies {
 	  implementation 'com.github.nsider4:InventoryManager:0.9'
 }
 ```
+
+# Example Usage:
+
