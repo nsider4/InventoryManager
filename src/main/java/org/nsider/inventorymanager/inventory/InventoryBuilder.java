@@ -96,7 +96,7 @@ public class InventoryBuilder {
      *
      * @param data The ItemData containing information about the item
      */
-    public void updateItemFromData(ItemData data) {
+    public void updateItem(ItemData data) {
         long id = data.getID();
 
         ItemStack item = ItemBuilder.getItemForId(id);
