@@ -43,5 +43,60 @@ dependencies {
 }
 ```
 
-# Example Usage:
+# Inventory Creation (Example Usage):
 
+Creating the inventory(example with title "Name" and size 27 slots):
+```Java
+InventoryBuilder inv = new InventoryBuilder("Name", 27);
+```
+
+Building an Item (Material can be set to any minecraft material):
+```Java
+ItemData data = ItemData.builder()
+                .setMaterial("STONE")
+                .setName(String)
+                .setLore(List<String>)
+                .setAmount(int)
+                .setSlots(List<Integer>)
+                .build();
+```
+
+Optional item creation without Builder:
+```Java
+ItemData data = new ItemData();
+data.setMaterial("STONE");
+```
+
+Adding the item to the inventory:
+```Java
+inv.addItem(data);
+```
+
+Removing the item from the inventory:
+```Java
+inv.removeItem(data);
+```
+
+Loading the whole inventory to create the updated inventory object:
+```Java
+inv.load();
+```
+
+# Useful Methods:
+
+Creates the itemstack related to the data given. Optional Material argument to force a material if it has to be changed at time of creation.
+```Java
+ItemStack item = ItemBuilder.fromItemData(ItemData info, Material... forcedMaterial);
+```
+
+Retrieving the ItemData object from the given ItemStack:
+```Java
+ItemData data = ItemBuilder.dataFromItemStack(ItemStack);
+```
+
+String utils (color, centered messages):
+```Java
+String coloredString = GeneralUtils.color(String); #Color string
+GeneralUtils.sendCenteredMessage(CommandSender, String); #Send normal message centered
+GeneralUtils.sendCenteredComponentMessage(Player, String, TextComponent); #Sends centerd message that contains normal text + component at end of the string.
+```
