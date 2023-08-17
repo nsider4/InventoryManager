@@ -61,7 +61,7 @@ ItemData data = ItemData.builder()
                 .build();
 ```
 
-Optional item creation without Builder:
+Optional item creation without Builder (you'd need to set all information this way):
 ```Java
 ItemData data = new ItemData();
 data.setMaterial("STONE");
@@ -98,5 +98,5 @@ String utils (color, centered messages):
 ```Java
 String coloredString = GeneralUtils.color(String); #Color string
 GeneralUtils.sendCenteredMessage(CommandSender, String); #Send normal message centered
-GeneralUtils.sendCenteredComponentMessage(Player, String, TextComponent); #Sends centerd message that contains normal text + component at end of the string.
+GeneralUtils.sendCenteredComponentMessage(Player, String, TextComponent); #Sends centered message that contains normal text + component at end of the string.
 ```
