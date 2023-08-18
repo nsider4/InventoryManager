@@ -50,7 +50,7 @@ Main.java:
 @Override
 public void onEnable() {
 
-    createInventory(); //Method were you created the inventories by adding ItemData objects
+    createInventory(); //Method where you created the inventories by adding ItemData objects
 
     //Loop through all inventories (if only one you can just call that inventory and load it without loop)
     for (InventoryBuilder inventories : InventoryHandler.getInstance().getInventories().values()) {
