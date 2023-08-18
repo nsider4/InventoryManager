@@ -74,8 +74,8 @@ public void createInventory() {
 		.setSlots(getConfig().getIntegerList("items."+section+".slots"))
 		.build();
 
-	inv.addItem(item);
 
+	inv.addItem(item);
     }
 
     inv.save();
