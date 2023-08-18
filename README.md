@@ -65,6 +65,7 @@ public void createInventory() {
     InventoryBuilder inv = new InventoryBuilder("test", 27);
 
     for(String section : getConfig().getConfigurationSection("items").getKeys(false)) {
+
 	ItemData item = ItemData.builder()
 		.setMaterial(getConfig().getString("items."+section+".material"))
 		.setName(getConfig().getString("items."+section+".name"))
@@ -74,6 +75,7 @@ public void createInventory() {
 		.build();
 
 	inv.addItem(item);
+
     }
 
     inv.save();
@@ -125,7 +127,7 @@ inv.load();
 ```
 
 
-Retrieving the ItemData with a certain name (this is the only method to find the data based on ItemMeta, you can also do this yourself by looping through itemDataList and checking for a different thing like "Amount")
+Retrieving the ItemData with a certain name (this is the only method to find the data based on ItemMeta included in API, you can do this yourself by looping through itemDataList and checking for a different thing like "Amount". See InventoryBuilder.java)
 ```Java
 Optional<ItemData> itemData = builder.getItemDataWithName("Item"); //Trying to get the ItemData with name "Item"
 
