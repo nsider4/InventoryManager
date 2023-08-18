@@ -60,17 +60,25 @@ public class InventoryBuilder {
         if(inventory.contains(itemToRemove)) { inventory.remove(itemToRemove); }
     }
 
-    /*
-     * Clears the inventory and adds the items from the itemsMap to their respective slots.
-     * This method should be called before opening the inventory for a player.
+    /**
+     * Saves the inventory name and InventoryBuilder object to the InventoryHandler
+     * This method should be called right after you've finished adding all ItemData to the itemsMap(addItem) for that inventory.
      */
-    public void load() {
+    public void save() {
         InventoryHandler handler = InventoryHandler.getInstance();
 
         if (handler.isAdded(inventoryName)) {
             handler.removeInventory(inventoryName);
         }
 
+        handler.addInventory(inventoryName, this);
+    }
+
+    /**
+     * Clears the inventory and adds the items from the itemsMap to their respective slots.
+     * This method should be called before opening the inventory for a player.
+     */
+    public void load() {
         inventory.clear();
 
         for (Map.Entry<ItemStack, List<Integer>> entry : itemsMap.entrySet()) {
@@ -81,8 +89,6 @@ public class InventoryBuilder {
                 inventory.setItem(slot, item.clone());
             }
         }
-
-        handler.addInventory(inventoryName, this);
     }
 
     public void clear() {
