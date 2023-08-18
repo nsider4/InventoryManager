@@ -67,7 +67,7 @@ ItemData data = new ItemData();
 data.setMaterial("STONE");
 ```
 
-Adding the item to the inventory:
+Adding the item to the inventory(Inventory has to be loaded after adding for it to appear in the inventory in-game):
 ```Java
 inv.addItem(data);
 ```
