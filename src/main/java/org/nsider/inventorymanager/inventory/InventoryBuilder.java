@@ -49,6 +49,18 @@ public class InventoryBuilder {
     }
 
     /*
+     * Removes an item from the inventory.
+     *
+     * @param data The ItemData containing information about the item to be removed.
+     */
+    public void removeItem(ItemData data) {
+        ItemStack itemToRemove = ItemBuilder.fromItemData(data);
+        itemsMap.remove(itemToRemove);
+        itemDataList.remove(data);
+        if(inventory.contains(itemToRemove)) { inventory.remove(itemToRemove); }
+    }
+
+    /*
      * Clears the inventory and adds the items from the itemsMap to their respective slots.
      * This method should be called before opening the inventory for a player.
      */
