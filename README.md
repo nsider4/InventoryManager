@@ -43,12 +43,50 @@ dependencies {
 }
 ```
 
-# Inventory Creation (Example Usage):
+# Example Usage
+
+Main.java:
+```Java
+@Override
+public void onEnable() {
+
+    createInventory(); //Method were you created the inventories by adding ItemData objects
+
+    //Loop through all inventories (if only one you can just call that inventory and load it without loop)
+    for (InventoryBuilder inventories : InventoryHandler.getInstance().getInventories().values()) {
+	inventories.load();
+    }
+}
+```
+
+Example.java:
+```Java
+public void createInventory() {
+    InventoryBuilder inv = new InventoryBuilder("test", 27);
+
+    for(String section : getConfig().getConfigurationSection("items").getKeys(false)) {
+	ItemData item = ItemData.builder()
+		.setMaterial(getConfig().getString("items."+section+".material"))
+		.setName(getConfig().getString("items."+section+".name"))
+		.setLore(getConfig().getStringList("items."+section+".lore"))
+		.setAmount(getConfig().getInt("items."+section+".amount"))
+		.setSlots(getConfig().getIntegerList("items."+section+".slots"))
+		.build();
+
+	inv.addItem(item);
+    }
+
+    inv.save();
+}
+```
+
+# Inventory Creation:
 
 Creating the inventory(example with title "Name" and size 27 slots):
 ```Java
 InventoryBuilder inv = new InventoryBuilder("Name", 27);
 ```
+
 
 Building an Item (Material can be set to any minecraft material):
 ```Java
@@ -61,26 +99,44 @@ ItemData data = ItemData.builder()
                 .build();
 ```
 
+
 Optional item creation without Builder (you'd need to set all information this way):
 ```Java
 ItemData data = new ItemData();
 data.setMaterial("STONE");
 ```
 
+
 Adding the item to the inventory(Inventory has to be loaded after adding for it to appear in the inventory in-game):
 ```Java
 inv.addItem(data);
 ```
+
 
 Removing the item from the inventory:
 ```Java
 inv.removeItem(data);
 ```
 
+
 Loading the whole inventory to create the updated inventory object:
 ```Java
 inv.load();
 ```
+
+
+Retrieving the ItemData with a certain name (this is the only method to find the data based on ItemMeta, you can also do this yourself by looping through itemDataList and checking for a different thing like "Amount")
+```Java
+Optional<ItemData> itemData = builder.getItemDataWithName("Item"); //Trying to get the ItemData with name "Item"
+
+itemData.ifPresent(data -> { //This checks if it exists and gives it the identifier "data"
+    data.setName("NEW NAME");
+    builder.updateItem(data);
+    // Perform other operations on the itemData here
+    // ...
+});
+```
+
 
 # Useful Methods:
 
