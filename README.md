@@ -164,3 +164,6 @@ String coloredString = GeneralUtils.color(String); #Color string
 GeneralUtils.sendCenteredMessage(CommandSender, String); #Send normal message centered
 GeneralUtils.sendCenteredComponentMessage(Player, String, TextComponent); #Sends centered message that contains normal text + component at end of the string.
 ```
+
+#
+Class used for material compatibility: https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XMaterial.java
