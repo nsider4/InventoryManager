@@ -80,6 +80,12 @@ public void createInventory() {
 
     inv.save();
 }
+
+//One way to open an inventory:
+public void openInventory(String invTitle, Player player){
+    InventoryBuilder builder = InventoryHandler.getInstance().getInventoryBuilder(invTitle);
+    builder.openInventory(player);
+}
 ```
 
 # Inventory Creation:
