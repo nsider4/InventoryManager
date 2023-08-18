@@ -52,7 +52,7 @@ public void onEnable() {
 
     createInventory(); //Method where you created the inventories by adding ItemData objects
 
-    //Loop through all inventories (if only one you can just call that inventory and load it without loop)
+    //Loop through all inventories to load on start (if only one you can just call that inventory and load it without loop)
     for (InventoryBuilder inventories : InventoryHandler.getInstance().getInventories().values()) {
 	inventories.load();
     }
