@@ -25,7 +25,7 @@ Maven:
 <dependency>
     <groupId>com.github.nsider4</groupId>
     <artifactId>InventoryManager</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.2</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -39,7 +39,7 @@ repositories {
 ```
 ```GRADLE
 dependencies {
-	  implementation 'com.github.nsider4:InventoryManager:0.9.1'
+	  implementation 'com.github.nsider4:InventoryManager:0.9.2'
 }
 ```
 
