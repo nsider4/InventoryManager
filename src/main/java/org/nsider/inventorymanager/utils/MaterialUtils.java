@@ -11,9 +11,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class MaterialUtils {
 
@@ -156,6 +156,6 @@ public class MaterialUtils {
     }
 
     private static String color(String message) {
-        return GeneralUtils.Color(message);
+        return GeneralUtils.color(message);
     }
 }
