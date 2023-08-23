@@ -24,7 +24,7 @@ public class GeneralUtils {
     /*
      * All versions support coloring, after 1.16 it supports HEX.
      */
-    public static String Color(String message) {
+    public static String color(String message) {
         if(getMCVersion() >= 16) {
             Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
             Matcher matcher = pattern.matcher(message);
