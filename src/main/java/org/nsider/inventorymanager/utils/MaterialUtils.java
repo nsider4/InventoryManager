@@ -61,16 +61,8 @@ public class MaterialUtils {
     }
 
     public static ItemStack createItem(Material material, int amount, String name, List<String> lore) {
-        ArrayList<String> lor = new ArrayList<>();
-        ItemStack item = new ItemStack(material, amount);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(name);
-        for (String loRe : lore) {
-            lor.add(color(loRe));
-        }
-        meta.setLore(lor);
-        item.setItemMeta(meta);
-        return item;
+        ItemStack item = createItem(material, amount);
+        return addMeta(item, name, lore);
     }
 
     public static ItemStack createLegacyItem(Material material, int amount, int data) {
@@ -78,45 +70,27 @@ public class MaterialUtils {
     }
 
     public static ItemStack createLegacyItem(Material material, int data, int amount, String name, List<String> lore) {
-        ArrayList<String> lor = new ArrayList<>();
-        ItemStack item = new ItemStack(material, amount, (byte) data);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(name);
-        for(String loRe : lore) {
-            lor.add(color(loRe));
-        }
-        meta.setLore(lor);
-        item.setItemMeta(meta);
-        return item;
+        ItemStack item = createLegacyItem(material, amount, data);
+        return addMeta(item, name, lore);
     }
-
 
     /**
-     * All addMeta methods add ItemMeta to an ItemStack, it gives option for using less parameters or more!
+     * Adds ItemMeta to an ItemStack with name and lore.
      */
     public static ItemStack addMeta(ItemStack item, String name, List<String> lore) {
-        ArrayList<String> lor = new ArrayList<>();
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
-        for (String loRe : lore) {
-            lor.add(color(loRe));
-        }
-        meta.setLore(lor);
+        meta.setLore(lore.stream().map(MaterialUtils::color).collect(Collectors.toList()));
         item.setItemMeta(meta);
         return item;
     }
 
+    /**
+     * Adds ItemMeta to an ItemStack with amount, name, and lore.
+     */
     public static ItemStack addMeta(ItemStack item, int amount, String name, List<String> lore) {
-        ArrayList<String> lor = new ArrayList<>();
-        ItemMeta meta = item.getItemMeta();
         item.setAmount(amount);
-        meta.setDisplayName(name);
-        for (String loRe : lore) {
-            lor.add(color(loRe));
-        }
-        meta.setLore(lor);
-        item.setItemMeta(meta);
-        return item;
+        return addMeta(item, name, lore);
     }
 
     /**
