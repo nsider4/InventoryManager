@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
@@ -80,7 +80,13 @@ public class MaterialUtils {
     public static ItemStack addMeta(ItemStack item, String name, List<String> lore) {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
-        meta.setLore(lore.stream().map(MaterialUtils::color).collect(Collectors.toList()));
+    
+        List<String> coloredLore = new ArrayList<>();
+        for (String loreLine : lore) {
+            coloredLore.add(MaterialUtils.color(loreLine));
+        }
+        meta.setLore(coloredLore);
+    
         item.setItemMeta(meta);
         return item;
     }
