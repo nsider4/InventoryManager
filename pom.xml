@@ -39,6 +39,15 @@
                             <shadedPattern>org.nsider.authlib</shadedPattern>
                         </relocation>
                     </relocations>
+                    <filters>
+                        <filter>
+                            <!-- Exclude these dependencies from being shaded -->
+                            <artifact>*:authlib</artifact>
+                            <artifact>*:spigot-api</artifact>
+                            <artifact>*:lombok</artifact>
+                            <!-- Add any other dependencies you don't want to include -->
+                        </filter>
+                    </filters>
                 </configuration>
                 <executions>
                     <execution>
@@ -88,32 +97,6 @@
             <groupId>com.mojang</groupId>
             <artifactId>authlib</artifactId>
             <version>1.5.21</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.commons</groupId>
-                    <artifactId>commons-lang3</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-codec</groupId>
-                    <artifactId>commons-codec</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-io</groupId>
-                    <artifactId>commons-io</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.code.findbugs</groupId>
-                    <artifactId>jsr305</artifactId>
-                </exclusion>
-            </exclusions>
             <scope>provided</scope>
         </dependency>
     </dependencies>
