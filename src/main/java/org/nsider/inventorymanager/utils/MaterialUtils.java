@@ -107,52 +107,13 @@ public class MaterialUtils {
      * @return The ItemStack object of the skull with the new skin.
      */
     public static ItemStack getCustomTextureHead(String value) {
-        ItemStack head;
-        if (GeneralUtils.getMCVersion() < 13) {
-            head = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
-        } else {
-            head = new ItemStack(Material.valueOf("PLAYER_HEAD"), 1);
-        }
+        ItemStack head = new ItemStack(Material.valueOf(GeneralUtils.getMCVersion() < 13 ? "SKULL_ITEM" : "PLAYER_HEAD"), 1);
 
-        SkullMeta meta = (SkullMeta) head.getItemMeta();
-        if (meta == null) {
-            Bukkit.getServer().getLogger().severe("Unable to get meta for head.");
-            return head;
-        }
-
-        if (GeneralUtils.getMCVersion() >= 20) {
-            //Use reflection to access PlayerProfile in newer versions (1.20+)
-            try {
-                UUID uuid = UUID.randomUUID();
-                Method createProfileMethod = Bukkit.class.getMethod("createProfile", UUID.class, String.class);
-                Object profile = createProfileMethod.invoke(Bukkit.class, uuid, uuid.toString().substring(0, 16));
-                Method setPropertyMethod = profile.getClass().getMethod("setProperty", String.class, String.class);
-                setPropertyMethod.invoke(profile, "textures", value);
-
-                Method setPlayerProfileMethod = meta.getClass().getMethod("setPlayerProfile", profile.getClass());
-                setPlayerProfileMethod.invoke(meta, profile);
-            } catch (Exception e) {
-                Bukkit.getServer().getLogger().severe("Unable to set PlayerProfile using reflection: " + e.getMessage());
-                return head;
-            }
-        } else {
-            //Handle versions before 1.20 (1.13 - 1.19)
-            GameProfile profile = new GameProfile(UUID.randomUUID(), "");
-            profile.getProperties().put("textures", new Property("textures", value));
-
-            try {
-                Field profileField = meta.getClass().getDeclaredField("profile");
-                profileField.setAccessible(true);
-                profileField.set(meta, profile);
-            } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-                Bukkit.getServer().getLogger().severe("Unable to set profile for head: " + e.getMessage());
-                return head;
-            }
-        }
-
-        head.setItemMeta(meta);
-        return head;
+        return SkullUtils.setSkullTexture(head, value);
     }
+
+
+
 
     /**
      * Gets the player skin skull as an item

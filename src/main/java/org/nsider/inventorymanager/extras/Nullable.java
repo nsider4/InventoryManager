@@ -1,4 +1,4 @@
-package org.nsider.inventorymanager.utils;
+package org.nsider.inventorymanager.extras;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,5 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Nonnull {
+public @interface Nullable {
 }
