@@ -9,6 +9,8 @@ import org.bukkit.SkullType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.nsider.inventorymanager.extras.Nonnull;
+import org.nsider.inventorymanager.extras.Nullable;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -118,40 +120,57 @@ public class MaterialUtils {
     /**
      * Gets the player skin skull as an item
      *
-     * @param playerUUID The desired player's UUID
+     * @param owner The desired player's name
      * @return The ItemStack object of the skull with the player's skin.
      */
     @SuppressWarnings("deprecation")
-    public static ItemStack getPlayerSkull(UUID playerUUID) {
-        OfflinePlayer p = Bukkit.getOfflinePlayer(playerUUID);
-        ItemStack skull = new ItemStack(Material.valueOf(GeneralUtils.getMCVersion() < 13 ? "SKULL_ITEM" : "LEGACY_SKULL_ITEM"), 1, (short) SkullType.PLAYER.ordinal());
-        SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        meta.setOwner(p.getName());
-        skull.setItemMeta(meta);
-        return skull;
+    public static ItemStack getPlayerSkull(@Nonnull String owner) {
+        ItemStack head = new ItemStack(Material.valueOf(GeneralUtils.getMCVersion() < 13 ? "SKULL_ITEM" : "PLAYER_HEAD"), 1);
+        ItemMeta meta = head.getItemMeta();
+
+        if (meta instanceof SkullMeta) {
+            ((SkullMeta) meta).setOwner(owner);
+            head.setItemMeta(meta);
+            if (GeneralUtils.getMCVersion() < 13) {
+                head.setDurability((short) SkullType.PLAYER.ordinal());
+            }
+
+            return head;
+        }
+
+        return null;
     }
 
     /**
-     * Checks if a skull has an owner
+     * Get the owner of the given skull ItemStack.
      *
-     * @param skull The item to check for
-     * @return True if the skull has an owner, false otherwise.
-     */
-    public static boolean skullHasOwner(ItemStack skull) {
-        SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        return meta.hasOwner();
-    }
-
-    /**
-     * Gets the skull's owner
-     *
-     * @param skull The item to get the owner from
-     * @return The owner.
+     * @param itemStack The ItemStack.
+     * @return The skull owner.
      */
     @SuppressWarnings("deprecation")
-    public static String getSkullOwner(ItemStack skull) {
-        SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        return meta.getOwner();
+    @Nullable
+    public static boolean skullHasOwner(@Nonnull ItemStack itemStack) {
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta instanceof SkullMeta) {
+            return ((SkullMeta) meta).hasOwner();
+        }
+        return false;
+    }
+
+    /**
+     * Get the owner of the given skull ItemStack.
+     *
+     * @param itemStack The ItemStack.
+     * @return The skull owner.
+     */
+    @SuppressWarnings("deprecation")
+    @Nullable
+    public static String getSkullOwner(@Nonnull ItemStack itemStack) {
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta instanceof SkullMeta) {
+            return ((SkullMeta) meta).getOwner();
+        }
+        return null;
     }
 
     private static String color(String message) {
