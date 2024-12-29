@@ -5,7 +5,7 @@
 
 # Documentation
 You can view the full Documentation for this project at the following link:
-[Documentation](https://nsider4.github.io/InventoryManager/)
+- [Documentation](https://nsider4.github.io/InventoryManager/)
 
 ---
 
