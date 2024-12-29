@@ -25,7 +25,9 @@ public class ItemData {
     }
 
     /**
-     * Constructs an ItemData with the specified values.
+     * Builder for ItemData with default values.
+     *
+     * @return the ItemDataBuilder with default values.
      */
     public static ItemDataBuilder builder() {
         return new ItemDataBuilder();

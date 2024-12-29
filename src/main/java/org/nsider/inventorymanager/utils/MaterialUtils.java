@@ -47,30 +47,81 @@ public class MaterialUtils {
         return material;
     }
 
-    /**
-     * All createItem methods create items, it gives option for using fewer parameters or more!
-     */
 
+    /**
+     * Creates an ItemStack with name and lore.
+     *
+     * @param material The material of the item.
+     * @param name     The name of the item.
+     * @param lore     The lore of the item.
+     * @return The created ItemStack.
+     */
+    public static ItemStack createItem(Material material, String name, List<String> lore) {
+        ItemStack item = new ItemStack(material);
+        return addMeta(item, name, lore);
+    }
+
+    /**
+     * Creates an ItemStack with material and amount.
+     *
+     * @param material The material of the item.
+     * @param amount   The amount of the item.
+     * @return The created ItemStack.
+     */
     public static ItemStack createItem(Material material, int amount) {
         return new ItemStack(material, amount);
     }
 
+    /**
+     * Creates an ItemStack with name, lore, and amount.
+     *
+     * @param material The material of the item.
+     * @param amount   The amount of the item.
+     * @param name     The name of the item.
+     * @param lore     The lore of the item.
+     * @return The created ItemStack.
+     */
     public static ItemStack createItem(Material material, int amount, String name, List<String> lore) {
         ItemStack item = createItem(material, amount);
         return addMeta(item, name, lore);
     }
 
+    /**
+     * Creates an ItemStack with material, amount, and data.
+     *
+     * @param material The material of the item.
+     * @param amount   The amount of the item.
+     * @param data     The data of the item.
+     * @return The created ItemStack.
+     */
     public static ItemStack createLegacyItem(Material material, int amount, int data) {
         return new ItemStack(material, amount, (byte) data);
     }
 
+    /**
+     * Creates an ItemStack with name, lore, and amount.
+     *
+     * @param material The material of the item.
+     * @param data     The data of the item.
+     * @param amount   The amount of the item.
+     * @param name     The name of the item.
+     * @param lore     The lore of the item.
+     * @return The created ItemStack.
+     */
     public static ItemStack createLegacyItem(Material material, int data, int amount, String name, List<String> lore) {
         ItemStack item = createLegacyItem(material, amount, data);
         return addMeta(item, name, lore);
     }
 
+
+
     /**
      * Adds ItemMeta to an ItemStack with name and lore.
+     *
+     * @param item  The item to add the meta to.
+     * @param name  The name of the item.
+     * @param lore  The lore of the item.
+     * @return The item with the meta added.
      */
     public static ItemStack addMeta(ItemStack item, String name, List<String> lore) {
         ItemMeta meta = item.getItemMeta();
@@ -82,7 +133,13 @@ public class MaterialUtils {
     }
 
     /**
-     * Adds ItemMeta to an ItemStack with amount, name, and lore.
+     * Adds ItemMeta to an ItemStack with name, lore, and amount.
+     *
+     * @param item  The item to add the meta to.
+     * @param amount The amount of the item.
+     * @param name  The name of the item.
+     * @param lore  The lore of the item.
+     * @return The item with the meta added.
      */
     public static ItemStack addMeta(ItemStack item, int amount, String name, List<String> lore) {
         item.setAmount(amount);

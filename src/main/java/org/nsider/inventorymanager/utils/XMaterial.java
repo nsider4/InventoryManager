@@ -1347,10 +1347,6 @@ public enum XMaterial {
     SHEEP_SPAWN_EGG(91, "MONSTER_EGG"),
     SHELTER_POTTERY_SHERD,
     SHIELD,
-    /**
-     * 1.13.0: LONG_GRASS:1
-     * 1.20.4: GRASS -> SHORT_GRASS
-     */
     SHORT_GRASS(1, "GRASS", "LONG_GRASS"),
     SHROOMLIGHT,
     SHULKER_BOX("PURPLE_SHULKER_BOX"),
@@ -1905,6 +1901,9 @@ public enum XMaterial {
      * Parses the given material name as an XMaterial with a given data
      * value in the string if attached. Check {@link #matchXMaterialWithData(String)} for more info.
      *
+     * @param name the material string that consists of the material name and data.
+     * @return the parsed XMaterial.
+     *
      * @see #matchXMaterialWithData(String)
      * @see #matchDefinedXMaterial(String, byte)
      * @since 2.0.0
@@ -1919,6 +1918,9 @@ public enum XMaterial {
 
     /**
      * Parses the given material as an XMaterial.
+     *
+     * @param material the material to match.
+     * @return an XMaterial if matched any.
      *
      * @throws IllegalArgumentException may be thrown as an unexpected exception.
      * @see #matchDefinedXMaterial(String, byte)
@@ -2189,6 +2191,8 @@ public enum XMaterial {
      * Use {@link #parseItem()} instead when creating new ItemStacks.
      *
      * @param item the item to change its type.
+     * @return the changed item.
+     *
      * @see #parseItem()
      * @since 3.0.0
      */
