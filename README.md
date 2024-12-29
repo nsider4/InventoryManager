@@ -1,51 +1,62 @@
-# InventoryManager | The perfect API to optimize inventory management!
+# InventoryManager  
+### The Perfect API to Optimize Inventory Management!
 
-[![](https://jitpack.io/v/nsider4/InventoryManager.svg)](https://jitpack.io/#nsider4/InventoryManager)
-#
-- Supports 1.8 to 1.20
-- Doesen't use any external API to make itself work, no dependencies
-- Supports numerical id's as well as Material name from any version
-- Inventory handler that contains all active inventories
-- Easy to update ItemStack information
+[![Version](https://jitpack.io/v/nsider4/InventoryManager.svg)](https://jitpack.io/#nsider4/InventoryManager)
 
+---
 
-# TO-DO List
-- Adding support to use a normal inventory as base for a per player inventory.
+## Features  
+- 🛠️ **Supports Minecraft versions**: 1.8 to 1.21  
+- ⚡ **No external dependencies**: Fully self-contained API  
+- 🧩 **Compatibility**: Supports both numerical IDs and material names across all versions  
+- 📦 **Inventory management**: Includes a handler for all active inventories  
+- 🔄 **Dynamic updates**: Easily modify `ItemStack` information  
 
-#
+---
 
-Maven:
-```XML
+## To-Do List  
+- 📝 Add support to use a normal inventory as a base for per-player inventories.  
+
+---
+
+## Installation
+
+### Maven  
+Add the JitPack repository:  
+```xml
 <repository>
     <id>jitpack.io</id>
     <url>https://jitpack.io</url>
 </repository>
 ```
+Include the dependency:
 ```XML
 <dependency>
     <groupId>com.github.nsider4</groupId>
     <artifactId>InventoryManager</artifactId>
-    <version>1.0.7</version>
+    <version>1.1.1</version>
     <scope>compile</scope>
 </dependency>
 ```
 
-Gradle:
+###Gradle:
+Add the JitPack repository:
 ```GRADLE
 repositories {
 	  ...
 	  maven { url 'https://jitpack.io' }
 }
 ```
+Include the dependency:
 ```GRADLE
 dependencies {
-	  implementation 'com.github.nsider4:InventoryManager:1.0.7'
+	  implementation 'com.github.nsider4:InventoryManager:1.1.1'
 }
 ```
 
 # Example Usage
 
-Main.java:
+## Main.java:
 ```Java
 @Override
 public void onEnable() {
@@ -59,7 +70,7 @@ public void onEnable() {
 }
 ```
 
-Example.java:
+## Example.java:
 ```Java
 public void createInventory() {
     InventoryBuilder inv = new InventoryBuilder("test", 27);
@@ -90,13 +101,13 @@ public void openInventory(String invTitle, Player player){
 
 # Inventory Creation:
 
-Creating the inventory(example with title "Name" and size 27 slots):
+## Creating the inventory(example with title "Name" and size 27 slots):
 ```Java
 InventoryBuilder inv = new InventoryBuilder("Name", 27);
 ```
 
 
-Building an Item (Material can be set to any minecraft material):
+## Building an Item (Material can be set to any minecraft material):
 ```Java
 ItemData data = ItemData.builder()
                 .setMaterial("STONE")
@@ -108,32 +119,32 @@ ItemData data = ItemData.builder()
 ```
 
 
-Optional item creation without Builder (you'd need to set all information this way):
+## Optional item creation without Builder (you'd need to set all information this way):
 ```Java
 ItemData data = new ItemData();
 data.setMaterial("STONE");
 ```
 
 
-Adding the item to the inventory(Inventory has to be loaded after adding for it to appear in the inventory in-game):
+## Adding the item to the inventory(Inventory has to be loaded after adding for it to appear in the inventory in-game):
 ```Java
 inv.addItem(data);
 ```
 
 
-Removing the item from the inventory:
+## Removing the item from the inventory:
 ```Java
 inv.removeItem(data);
 ```
 
 
-Loading the whole inventory to create the updated inventory object:
+## Loading the whole inventory to create the updated inventory object:
 ```Java
 inv.load();
 ```
 
 
-Retrieving the ItemData with a certain name (this is the only method to find the data based on ItemMeta included in API, you can do this yourself by looping through itemDataList and checking for a different thing like "Amount". See InventoryBuilder.java)
+## Retrieving the ItemData with a certain name (this is the only method to find the data based on ItemMeta included in API, you can do this yourself by looping through itemDataList and checking for a different thing like "Amount". See InventoryBuilder.java)
 ```Java
 Optional<ItemData> itemData = builder.getItemDataWithName("Item"); //Trying to get the ItemData with name "Item"
 
@@ -148,17 +159,17 @@ itemData.ifPresent(data -> { //This checks if it exists and gives it the identif
 
 # Useful Methods:
 
-Creates the itemstack related to the data given. Optional Material argument to force a material if it has to be changed at time of creation.
+## Creates the itemstack related to the data given. Optional Material argument to force a material if it has to be changed at time of creation.
 ```Java
 ItemStack item = ItemBuilder.fromItemData(ItemData info, Material... forcedMaterial);
 ```
 
-Retrieving the ItemData object from the given ItemStack:
+## Retrieving the ItemData object from the given ItemStack:
 ```Java
 ItemData data = ItemBuilder.dataFromItemStack(ItemStack);
 ```
 
-String utils (color, centered messages):
+## String utils (color, centered messages):
 ```Java
 String coloredString = GeneralUtils.color(String); #Color string
 GeneralUtils.sendCenteredMessage(CommandSender, String); #Send normal message centered
@@ -166,4 +177,4 @@ GeneralUtils.sendCenteredComponentMessage(Player, String, TextComponent); #Sends
 ```
 
 #
-Class used for material compatibility: https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XMaterial.java
+A modified version of this class was used for material compatibility: https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XMaterial.java
