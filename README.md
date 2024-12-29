@@ -39,7 +39,7 @@ Include the dependency:
 </dependency>
 ```
 
-###Gradle:
+### Gradle:
 Add the JitPack repository:
 ```GRADLE
 repositories {
