@@ -106,6 +106,18 @@ public void openInventory(String invTitle, Player player){
 InventoryBuilder inv = new InventoryBuilder("Name", 27);
 ```
 
+# Base Inventories
+
+## Set base inventories to an inventory to load both into one
+```Java
+InventoryBuilder playerInventory = new InventoryBuilder("PlayerInventory", 54);
+playerInventory.setBaseInventoryName("BaseInventory"); //Inherit from "BaseInventory"
+playerInventory.addItem(newItemData);
+playerInventory.save();
+
+playerInventory.load(); //Load base and player-specific inventory items
+```
+
 
 ## Building an Item (Material can be set to any minecraft material):
 ```Java
