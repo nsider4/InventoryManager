@@ -5,6 +5,10 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * The ItemData class is used to store information about an ItemStack.
+ * It includes the name, lore, material, amount, and ID of the ItemStack.
+ */
 @Data
 public class ItemData {
     private String name;
@@ -14,13 +18,22 @@ public class ItemData {
     private long ID;
     private List<Integer> slots;
 
+    /**
+     * Constructs an ItemData with default values.
+     */
     public ItemData() {
     }
 
+    /**
+     * Constructs an ItemData with the specified values.
+     */
     public static ItemDataBuilder builder() {
         return new ItemDataBuilder();
     }
 
+    /**
+     * Builder for ItemData with the specified values.
+     */
     public static class ItemDataBuilder {
         private ItemData itemData;
 

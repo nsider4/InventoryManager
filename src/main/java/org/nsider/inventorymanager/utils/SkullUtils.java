@@ -19,12 +19,15 @@ import java.util.Collection;
 import java.util.UUID;
 import java.util.function.Function;
 
+/**
+ * Utility class for Skulls.
+ */
 public class SkullUtils {
     private static Field PROFILE_FIELD;
     private static Method SET_PROFILE_METHOD;
-    private static boolean INITIALIZED = false;
+    private static boolean PROFILE_INITIALIZED = false;
     private static Method PROPERTY_VALUE_METHOD;
-    private static Function<Property, String> VALUE_RESOLVER;
+    private static Function<Property, String> VALUE_EXTRACTOR;
 
     /**
      * Get the Base64 texture of the given skull ItemStack.
@@ -47,13 +50,13 @@ public class SkullUtils {
             if (profile == null) {
                 return null;
             }
-            if (VALUE_RESOLVER == null) {
+            if (VALUE_EXTRACTOR == null) {
                 try {
                     Property.class.getMethod("getValue");
-                    VALUE_RESOLVER = Property::getValue;
+                    VALUE_EXTRACTOR = Property::getValue;
                 } catch (NoSuchMethodException ignored) {
                     PROPERTY_VALUE_METHOD = Property.class.getMethod("value");
-                    VALUE_RESOLVER = property -> {
+                    VALUE_EXTRACTOR = property -> {
                         try {
                             return (String) PROPERTY_VALUE_METHOD.invoke(property);
                         } catch (IllegalAccessException | InvocationTargetException e) {
@@ -66,25 +69,14 @@ public class SkullUtils {
             PropertyMap properties = profile.getProperties();
             Collection<Property> property = properties.get("textures");
             if (property != null && !property.isEmpty()) {
-                return VALUE_RESOLVER.apply(property.iterator().next());
+                return VALUE_EXTRACTOR.apply(property.iterator().next());
             }
         } catch (Exception e) {
             Bukkit.getLogger().severe("An exception occurred while setting skull texture");
         }
         return null;
     }
-    /**
-     * Get the Base64 texture of the given skull ItemStack.
-     *
-     * @param itemStack The ItemStack.
-     * @return The skull texture. (Base64)
-     * @deprecated Use {@link #getSkullTexture(ItemStack)} instead.
-     */
-    @Deprecated
-    @Nullable
-    public static String getTexture(@NonNull ItemStack itemStack) {
-        return getSkullTexture(itemStack);
-    }
+
     /**
      * Set the Base64 texture of the given skull ItemStack.
      *
@@ -99,7 +91,7 @@ public class SkullUtils {
                 Property property = new Property("textures", texture);
                 PropertyMap properties = profile.getProperties();
                 properties.put("textures", property);
-                if (SET_PROFILE_METHOD == null && !INITIALIZED) {
+                if (SET_PROFILE_METHOD == null && !PROFILE_INITIALIZED) {
                     try {
                         //This method only exists in 1.16+ versions . For older versions, use reflection
                         SET_PROFILE_METHOD = meta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
@@ -107,7 +99,7 @@ public class SkullUtils {
                     } catch (NoSuchMethodException e) {
                         //Server is running an older version.
                     }
-                    INITIALIZED = true;
+                    PROFILE_INITIALIZED = true;
                 }
                 if (SET_PROFILE_METHOD != null) {
                     SET_PROFILE_METHOD.invoke(meta, profile);

@@ -10,7 +10,12 @@ import java.util.Map;
  * It allows adding, removing, and retrieving inventories by name.
  */
 public class InventoryHandler {
-    private static final InventoryHandler instance = new InventoryHandler();
+    /**
+     * -- GETTER --
+     * Returns the singleton instance of the InventoryHandler.
+     */
+    @Getter private static final InventoryHandler instance = new InventoryHandler();
+
     @Getter private Map<String, InventoryBuilder> inventories;
 
     /*
@@ -19,13 +24,6 @@ public class InventoryHandler {
      */
     private InventoryHandler() {
         inventories = new HashMap<>();
-    }
-
-    /**
-     * @return The instance of the InventoryHandler.
-     */
-    public static InventoryHandler getInstance() {
-        return instance;
     }
 
     /**

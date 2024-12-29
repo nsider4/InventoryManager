@@ -15,16 +15,17 @@ import java.util.concurrent.ConcurrentHashMap;
 /*
  * The InventoryBuilder class is used to create custom inventories and add items to them.
  */
+@Getter
 public class InventoryBuilder {
 
+    private ConcurrentHashMap<ItemStack, List<Integer>> itemsMap;
+    private Inventory inventory;
+    @Setter private List<ItemData> itemDataList;
+    @Setter private String inventoryName;
+    @Setter private int inventorySize;
+    @Setter private String baseInventoryName;
 
-    @Getter private ConcurrentHashMap<ItemStack, List<Integer>> itemsMap;
-    @Getter private Inventory inventory;
-    @Getter @Setter private List<ItemData> itemDataList;
-    @Getter @Setter private String inventoryName;
-    @Getter @Setter private int inventorySize;
-
-    /*
+    /**
      * Constructs an InventoryBuilder with the specified name and size.
      *
      * @param inventoryName The name of the inventory.
@@ -36,9 +37,10 @@ public class InventoryBuilder {
         this.inventoryName = inventoryName;
         this.inventorySize = inventorySize;
         this.inventory = Bukkit.createInventory(null, inventorySize, inventoryName);
+        this.baseInventoryName = null;
     }
 
-    /*
+    /**
      * Adds an item to the inventory.
      *
      * @param data The ItemData containing information about the item to be added.
@@ -48,7 +50,7 @@ public class InventoryBuilder {
         itemDataList.add(data);
     }
 
-    /*
+    /**
      * Removes an item from the inventory.
      *
      * @param data The ItemData containing information about the item to be removed.
@@ -74,12 +76,36 @@ public class InventoryBuilder {
         handler.addInventory(inventoryName, this);
     }
 
+
+    /**
+     * Checks if the inventory has a base inventory
+     *
+     * @return True if the inventory has a base inventory, false otherwise
+     */
+    public boolean hasBaseInventory() {
+        return baseInventoryName != null;
+    }
+
     /**
      * Clears the inventory and adds the items from the itemsMap to their respective slots.
      * This method should be called before opening the inventory for a player.
      */
     public void load() {
         inventory.clear();
+
+        if (hasBaseInventory()) {
+            InventoryBuilder baseInventory = InventoryHandler.getInstance().getInventoryBuilder(baseInventoryName);
+
+            if (baseInventory != null) {
+                for (Map.Entry<ItemStack, List<Integer>> entry : baseInventory.getItemsMap().entrySet()) {
+                    ItemStack baseItem = entry.getKey();
+                    List<Integer> baseSlots = entry.getValue();
+                    for (int slot : baseSlots) {
+                        inventory.setItem(slot, baseItem.clone());
+                    }
+                }
+            }
+        }
 
         for (Map.Entry<ItemStack, List<Integer>> entry : itemsMap.entrySet()) {
             ItemStack item = entry.getKey();
@@ -91,13 +117,17 @@ public class InventoryBuilder {
         }
     }
 
+
+    /**
+     * Clears the inventory and the itemsMap
+     */
     public void clear() {
         itemsMap.clear();
         inventory.clear();
         itemDataList.clear();
     }
 
-    /*
+    /**
      * Finds the ItemData with the specified name.
      *
      * @param targetName The name to look for in the data.
@@ -109,7 +139,7 @@ public class InventoryBuilder {
                 .findFirst();
     }
 
-    /*
+    /**
      * Updates an item with the updated data
      *
      * @param data The ItemData containing information about the item
@@ -125,6 +155,11 @@ public class InventoryBuilder {
     }
 
 
+    /**
+     * Opens the inventory for the specified player.
+     *
+     * @param p The player to open the inventory for.
+     */
     public void openInventory(Player p) {
         p.openInventory(inventory);
     }
