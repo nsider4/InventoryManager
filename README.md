@@ -3,8 +3,6 @@
 
 [![Version](https://jitpack.io/v/nsider4/InventoryManager.svg)](https://jitpack.io/#nsider4/InventoryManager)
 
-Javadocs: https://nsider4.github.io/InventoryManager/
-
 ---
 
 ## Features  
@@ -15,6 +13,12 @@ Javadocs: https://nsider4.github.io/InventoryManager/
 - 🔄 **Dynamic updates**: Easily modify `ItemStack` information  
 
 ---
+
+## Documentation
+
+You can view the full Javadoc for this project at the following link:
+
+[Javadoc](https://username.github.io/repository-name/)
 
 ## Installation
 
