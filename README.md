@@ -3,6 +3,8 @@
 
 [![Version](https://jitpack.io/v/nsider4/InventoryManager.svg)](https://jitpack.io/#nsider4/InventoryManager)
 
+Javadocs: https://nsider4.github.io/InventoryManager/
+
 ---
 
 ## Features  
@@ -11,11 +13,6 @@
 - 🧩 **Compatibility**: Supports both numerical IDs and material names across all versions  
 - 📦 **Inventory management**: Includes a handler for all active inventories  
 - 🔄 **Dynamic updates**: Easily modify `ItemStack` information  
-
----
-
-## To-Do List  
-- 📝 Add support to use a normal inventory as a base for per-player inventories.  
 
 ---
 
@@ -34,7 +31,7 @@ Include the dependency:
 <dependency>
     <groupId>com.github.nsider4</groupId>
     <artifactId>InventoryManager</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -50,7 +47,7 @@ repositories {
 Include the dependency:
 ```GRADLE
 dependencies {
-	  implementation 'com.github.nsider4:InventoryManager:1.1.1'
+	  implementation 'com.github.nsider4:InventoryManager:1.1.2'
 }
 ```
 
