@@ -3,7 +3,9 @@
 
 [![Version](https://jitpack.io/v/nsider4/InventoryManager.svg)](https://jitpack.io/#nsider4/InventoryManager)
 
-You can view the full Documentation for this project at the following link: [Documentation](https://username.github.io/repository-name/)
+# Documentation
+You can view the full Documentation for this project at the following link:
+[Documentation]([https://username.github.io/repository-name/](https://nsider4.github.io/InventoryManager/)
 
 ---
 
