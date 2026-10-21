@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.nsider.inventorymanager.extras.Nonnull;
 import org.nsider.inventorymanager.extras.Nullable;
 
+import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
 public final class Text {
 
     private static final Pattern HEX = Pattern.compile("&#([0-9a-fA-F]{6})");
+    private static volatile Method setPlaceholders;
 
     private Text() {
     }
@@ -45,11 +47,22 @@ public final class Text {
         return ChatColor.translateAlternateColorCodes('&', result.toString());
     }
 
-    /** Fills PlaceholderAPI placeholders when it's installed; otherwise returns the text. */
+    /**
+     * Fills PlaceholderAPI placeholders when it's installed; otherwise returns the text.
+     * Called by reflection, so the library needs no PlaceholderAPI dependency to build.
+     */
     @Nonnull
     public static String placeholders(@Nullable OfflinePlayer player, @Nonnull String text) {
         if (text.indexOf('%') < 0 || !hasPlaceholderApi()) return text;
-        return me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, text);
+        try {
+            if (setPlaceholders == null) {
+                setPlaceholders = Class.forName("me.clip.placeholderapi.PlaceholderAPI")
+                        .getMethod("setPlaceholders", OfflinePlayer.class, String.class);
+            }
+            return (String) setPlaceholders.invoke(null, player, text);
+        } catch (ReflectiveOperationException | LinkageError e) {
+            return text;
+        }
     }
 
     public static boolean hasPlaceholderApi() {

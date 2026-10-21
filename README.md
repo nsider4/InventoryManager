@@ -24,7 +24,7 @@ Your plugin supplies the data. Each server owner's YAML decides what the menu lo
 <dependency>
     <groupId>com.github.nsider4</groupId>
     <artifactId>InventoryManager</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
 </dependency>
 ```
 Shade it into your plugin and **relocate** both `org.nsider.inventorymanager` and `com.cryptomorin.xseries`, so plugins using different versions can't clash.
