@@ -131,6 +131,7 @@ stats:
 | `[message] <text>` / `[broadcast] <text>` | to the viewer / to everyone |
 | `[sound] <name> [volume] [pitch]` | any sound name from 1.8 to 26.x |
 | `[open] <menu> [args]` | opens another menu (args become `%arg_1%`...) |
+| `[switch] <menu> [args]` | like `[open]`, but `[back]` skips it (tabs) |
 | `[back] [fallback menu]` | the previous menu; closes if there is none |
 | `[refresh]`, `[close]` | |
 | `[next-page]`, `[previous-page]`, `[page] <n>` | |

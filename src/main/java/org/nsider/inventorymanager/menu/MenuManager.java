@@ -47,6 +47,7 @@ import java.util.logging.Logger;
  * [command] spawn             the viewer runs a command    [console] give %player% diamond 1
  * [message] &amp;aHi             to the viewer                 [broadcast] &amp;aHi everyone
  * [sound] UI_BUTTON_CLICK 1 1 any 1.8-26.x sound name    [open] menu-id [args...]
+ * [switch] menu-id [args...]  like open, but [back] skips this menu (tabs)
  * [back]                      the menu before (or closes)  [refresh]   [close]
  * [next-page] [previous-page] [page] 2                     [wait] 20   ticks before the rest run
  * [plugin:action] argument    one a plugin registered
@@ -175,10 +176,8 @@ public final class MenuManager {
     }
 
     public boolean open(@Nonnull Player player, @Nonnull MenuRequest request) {
-        if (!hasMenu(request.getId())) {
-            logger.warning("There is no menu called '" + request.getId() + "'.");
-            return false;
-        }
+        // No console warning: this is usually a player's typo, and the caller tells them
+        if (!hasMenu(request.getId())) return false;
         history.remove(player.getUniqueId());
         show(player, request);
         return true;
@@ -383,6 +382,14 @@ public final class MenuManager {
                 String[] parts = argument.split("\\s+");
                 if (parts[0].isEmpty()) return;
                 openFrom(menu, MenuRequest.of(parts[0], Arrays.copyOfRange(parts, 1, parts.length)));
+                return;
+            case "switch":
+                String[] target = argument.split("\\s+");
+                if (target[0].isEmpty() || !hasMenu(target[0])) {
+                    logger.warning("Menu '" + menu.getId() + "' tried to switch to '" + target[0] + "', which doesn't exist.");
+                    return;
+                }
+                show(player, MenuRequest.of(target[0], Arrays.copyOfRange(target, 1, target.length)));
                 return;
             case "back":
                 back(menu, argument);
