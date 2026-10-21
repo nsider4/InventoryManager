@@ -1,19 +1,20 @@
 package org.nsider.inventorymanager.utils;
 
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
-import org.bukkit.SkullType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.nsider.inventorymanager.extras.Nonnull;
 import org.nsider.inventorymanager.extras.Nullable;
+import org.nsider.inventorymanager.item.Materials;
 
 import java.util.List;
 
 public class MaterialUtils {
 
     /**
-     * Retrieves the Material based on its name/id.
+     * Retrieves the Material based on its name/id, on any version (see {@link Materials}).
      *
      * @param name The name of the material.
      * @return The corresponding Material.
@@ -21,14 +22,9 @@ public class MaterialUtils {
      */
     public static Material getMaterial(String name) {
 
-        XMaterial xMaterial = XMaterial.matchXMaterial(name)
+        XMaterial xMaterial = Materials.match(name)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid material: " + name));
-        Material material = null;
-        if (xMaterial != null) {
-            material = xMaterial.parseMaterial();
-        }
-
-        return material;
+        return xMaterial.get();
     }
 
     /**
@@ -39,12 +35,7 @@ public class MaterialUtils {
      */
     public static Material getMaterial(XMaterial mat) {
 
-        Material material = null;
-        if (mat != null) {
-            material = mat.parseMaterial();
-        }
-
-        return material;
+        return mat == null ? null : mat.get();
     }
 
 
@@ -88,6 +79,7 @@ public class MaterialUtils {
 
     /**
      * Creates an ItemStack with material, amount, and data.
+     * Prefer {@link Materials#item(String)}, which handles legacy data on every version.
      *
      * @param material The material of the item.
      * @param amount   The amount of the item.
@@ -153,9 +145,7 @@ public class MaterialUtils {
      * @return The ItemStack object of the skull with the new skin.
      */
     public static ItemStack getCustomTextureHead(String value) {
-        ItemStack head = new ItemStack(Material.valueOf(GeneralUtils.getMCVersion() < 13 ? "SKULL_ITEM" : "PLAYER_HEAD"), 1);
-
-        return SkullUtils.setSkullTexture(head, value);
+        return SkullUtils.setSkullTexture(XMaterial.PLAYER_HEAD.parseItem(), value);
     }
 
 
@@ -169,16 +159,13 @@ public class MaterialUtils {
      */
     @SuppressWarnings("deprecation")
     public static ItemStack getPlayerSkull(@Nonnull String owner) {
-        ItemStack head = new ItemStack(Material.valueOf(GeneralUtils.getMCVersion() < 13 ? "SKULL_ITEM" : "PLAYER_HEAD"), 1);
+        // parseItem gives SKULL_ITEM:3 (a player head) before 1.13
+        ItemStack head = XMaterial.PLAYER_HEAD.parseItem();
         ItemMeta meta = head.getItemMeta();
 
         if (meta instanceof SkullMeta) {
             ((SkullMeta) meta).setOwner(owner);
             head.setItemMeta(meta);
-            if (GeneralUtils.getMCVersion() < 13) {
-                head.setDurability((short) SkullType.PLAYER.ordinal());
-            }
-
             return head;
         }
 

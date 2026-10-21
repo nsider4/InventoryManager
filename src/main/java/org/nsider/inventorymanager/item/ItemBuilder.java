@@ -10,6 +10,11 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * @deprecated menus are built with {@link org.nsider.inventorymanager.menu.MenuManager};
+ * single items with {@link ItemFactory} or {@link Materials}.
+ */
+@Deprecated
 public class ItemBuilder {
 
     private static final Map<Long, ItemStack> idToItemMap = new IdentityHashMap<>();
@@ -81,13 +86,10 @@ public class ItemBuilder {
             info.setID(getIdFor(item));
             return item;
         } else {
-            Material material = forcedMaterial.length == 0 ? MaterialUtils.getMaterial(info.getMaterial()) : forcedMaterial[0];
-            ItemStack item = MaterialUtils.createItem(
-                    material,
-                    info.getAmount(),
-                    info.getName(),
-                    info.getLore()
-            );
+            // Materials.item keeps legacy data (e.g. WOOL:14 stays red on 1.8)
+            ItemStack base = forcedMaterial.length == 0 ? Materials.item(info.getMaterial()) : new ItemStack(forcedMaterial[0]);
+            if (base == null) throw new IllegalArgumentException("Invalid material: " + info.getMaterial());
+            ItemStack item = MaterialUtils.addMeta(base, Math.max(1, info.getAmount()), info.getName(), info.getLore());
             info.setID(getIdFor(item));
             return item;
         }

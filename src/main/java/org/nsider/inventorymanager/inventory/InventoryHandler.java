@@ -9,6 +9,7 @@ import java.util.Map;
  * The InventoryHandler class manages the collection of custom inventories.
  * It allows adding, removing, and retrieving inventories by name.
  */
+@Deprecated
 public class InventoryHandler {
     /**
      * -- GETTER --

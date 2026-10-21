@@ -15,6 +15,11 @@ import java.util.concurrent.ConcurrentHashMap;
 /*
  * The InventoryBuilder class is used to create custom inventories and add items to them.
  */
+/**
+ * @deprecated one shared inventory per name, with no click handling. Use
+ * {@link org.nsider.inventorymanager.menu.MenuManager}.
+ */
+@Deprecated
 @Getter
 public class InventoryBuilder {
 

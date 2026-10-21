@@ -1,191 +1,163 @@
-# InventoryManager  
-### The Perfect API to Optimize Inventory Management!
+# InventoryManager
+### Config-driven menus for Spigot, Paper and Folia, 1.8 to 26.x
 
 [![Version](https://jitpack.io/v/nsider4/InventoryManager.svg)](https://jitpack.io/#nsider4/InventoryManager)
 
-## Documentation
-You can view the full documentation for this project at the following link:
-- [Documentation](https://nsider4.github.io/InventoryManager/)
+Your plugin supplies the data. Each server owner's YAML decides what the menu looks like **and what every button does**. One jar runs on every version from 1.8 to 26.x and on Folia.
 
----
-
-## Features  
-- 🛠️ **Supports Minecraft versions**: 1.8 to 1.21  
-- ⚡ **No external dependencies**: Fully self-contained API  
-- 🧩 **Compatibility**: Supports both numerical IDs and material names across all versions  
-- 📦 **Inventory management**: Includes a handler for all active inventories  
-- 🔄 **Dynamic updates**: Easily modify `ItemStack` information  
-
----
+## Features
+- 🧩 **Menus from YAML**: titles, sizes, slots, items, paged lists and templates.
+- 🖱️ **Actions**: you can run commands, send messages, play sounds, open other menus, go back, turn pages, refresh, wait, or run your plugin's own actions. A button can do something different on left, right, shift and middle clicks.
+- 🔒 **Requirements**: show an item, allow a click or allow opening a menu based on a permission or any placeholder comparison (with PlaceholderAPI).
+- 🎨 **Items**: any material written any way (`RED_WOOL`, `WOOL:14`, `35:14`, `red wool`), glow, enchantments, flags, player heads (name, texture or URL), leather colours, custom model data, item models and hex colours.
+- 🔁 **Toggles**: an item can have a `when-off` look, and live menus can refresh themselves on an interval.
+- ⚙️ **Safe**: every click and drag is cancelled, clicks are matched by holder (not by title), double clicks are debounced, and work runs on the right thread on Folia.
+- Built on [XSeries](https://github.com/CryptoMorin/XSeries).
 
 ## Installation
-
-### Maven  
-Add the JitPack repository:  
 ```xml
 <repository>
     <id>jitpack.io</id>
     <url>https://jitpack.io</url>
 </repository>
-```
-Include the dependency:
-```XML
+
 <dependency>
     <groupId>com.github.nsider4</groupId>
     <artifactId>InventoryManager</artifactId>
-    <version>1.1.2</version>
-    <scope>compile</scope>
+    <version>2.0.0</version>
 </dependency>
 ```
+Shade it into your plugin and **relocate** both `org.nsider.inventorymanager` and `com.cryptomorin.xseries`, so plugins using different versions can't clash.
 
-### Gradle:
-Add the JitPack repository:
-```GRADLE
-repositories {
-	  ...
-	  maven { url 'https://jitpack.io' }
-}
-```
-Include the dependency:
-```GRADLE
-dependencies {
-	  implementation 'com.github.nsider4:InventoryManager:1.1.2'
-}
-```
+## Using it
+```java
+MenuManager menus = new MenuManager(plugin);
+menus.load(menusConfig.getConfigurationSection("menus"));   // each child section is one menu
+menus.loadFolder(new File(getDataFolder(), "menus"));         // optional: one menu per file
 
-# Example Usage
-
-## Main.java:
-```Java
-@Override
-public void onEnable() {
-
-    createInventory(); //Method where you created the inventories by adding ItemData objects
-
-    //Loop through all inventories to load on start (if only one you can just call that inventory and load it without loop)
-    for (InventoryBuilder inventories : InventoryHandler.getInstance().getInventories().values()) {
-	inventories.load();
+// A provider fills in the data before the menu is drawn
+menus.registerMenu("stats", menu -> {
+    Player player = menu.getPlayer();
+    menu.set("%kills%", kills(player));
+    for (Quest quest : quests(player)) {
+        Map<String, Object> values = new HashMap<>();
+        values.put("%quest%", quest.getName());
+        values.put("%id%", quest.getId());
+        menu.addEntry(quest.isDone() ? "done" : "open", values);   // drawn with templates.done / templates.open
     }
-}
-```
-
-## Example.java:
-```Java
-public void createInventory() {
-    InventoryBuilder inv = new InventoryBuilder("test", 27);
-
-    for(String section : getConfig().getConfigurationSection("items").getKeys(false)) {
-
-	ItemData item = ItemData.builder()
-		.setMaterial(getConfig().getString("items."+section+".material"))
-		.setName(getConfig().getString("items."+section+".name"))
-		.setLore(getConfig().getStringList("items."+section+".lore"))
-		.setAmount(getConfig().getInt("items."+section+".amount"))
-		.setSlots(getConfig().getIntegerList("items."+section+".slots"))
-		.build();
-
-
-	inv.addItem(item);
-    }
-
-    inv.save();
-}
-
-//One way to open an inventory:
-public void openInventory(String invTitle, Player player){
-    InventoryBuilder builder = InventoryHandler.getInstance().getInventoryBuilder(invTitle);
-    builder.openInventory(player);
-}
-```
-
-# Inventory Creation:
-
-## Creating the inventory(example with title "Name" and size 27 slots):
-```Java
-InventoryBuilder inv = new InventoryBuilder("Name", 27);
-```
-
-# Base Inventories
-
-## Set base inventories to an inventory to load both into one
-```Java
-InventoryBuilder playerInventory = new InventoryBuilder("PlayerInventory", 54);
-playerInventory.setBaseInventoryName("BaseInventory"); //Inherit from "BaseInventory"
-playerInventory.addItem(newItemData);
-playerInventory.save();
-
-playerInventory.load(); //Load base and player-specific inventory items
-```
-
-
-## Building an Item (Material can be set to any minecraft material):
-```Java
-ItemData data = ItemData.builder()
-                .setMaterial("STONE")
-                .setName(String)
-                .setLore(List<String>)
-                .setAmount(int)
-                .setSlots(List<Integer>)
-                .build();
-```
-
-
-## Optional item creation without Builder (you'd need to set all information this way):
-```Java
-ItemData data = new ItemData();
-data.setMaterial("STONE");
-```
-
-
-## Adding the item to the inventory(Inventory has to be loaded after adding for it to appear in the inventory in-game):
-```Java
-inv.addItem(data);
-```
-
-
-## Removing the item from the inventory:
-```Java
-inv.removeItem(data);
-```
-
-
-## Loading the whole inventory to create the updated inventory object:
-```Java
-inv.load();
-```
-
-
-## Retrieving the ItemData with a certain name (this is the only method to find the data based on ItemMeta included in API, you can do this yourself by looping through itemDataList and checking for a different thing like "Amount". See InventoryBuilder.java)
-```Java
-Optional<ItemData> itemData = builder.getItemDataWithName("Item"); //Trying to get the ItemData with name "Item"
-
-itemData.ifPresent(data -> { //This checks if it exists and gives it the identifier "data"
-    data.setName("NEW NAME");
-    builder.updateItem(data);
-    // Perform other operations on the itemData here
-    // ...
+    menu.state("notifications", settings(player).notifications());  // normal or when-off look
 });
+
+// Actions your configs can use: [myplugin:claim] %id%
+menus.registerAction("myplugin:claim", (menu, argument) -> claim(menu.getPlayer(), argument));
+
+menus.open(player, "stats");
+```
+A menu without a provider opens straight from its YAML, so server owners can add their own menus. Optional extras:
+- `setTaskRunner(...)` plugs in your own scheduler wrapper.
+- `onClick(item, handler)` binds a click in code.
+- `cancel()` stops a menu from opening.
+
+## Menu YAML
+```yaml
+stats:
+  title: '&8Your stats &7(%page%/%pages%)'
+  rows: 4                       # 1-6, or type: HOPPER / DISPENSER / ...
+  update-interval: 0            # ticks between automatic refreshes while open
+  open-requirements: ['permission myplugin.stats']
+  open-deny-actions: ['[message] &cYou can''t open this.']
+  open-actions: ['[sound] BLOCK_CHEST_OPEN']
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    name: ' '
+  items:
+    kills:
+      slot: 4
+      material: DIAMOND_SWORD
+      name: '&cKills: &f%kills%'
+      lore: ['&7Balance: &f%vault_eco_balance%']
+      glow: true
+    notifications:
+      slot: 22
+      material: LIME_DYE
+      name: '&aNotifications: on'
+      actions: ['[command] myplugin notify toggle', '[wait] 2', '[refresh]']
+      when-off:
+        material: GRAY_DYE
+        name: '&cNotifications: off'
+    admin:
+      slot: 8
+      material: COMMAND_BLOCK
+      name: '&cAdmin'
+      view-requirements: ['permission myplugin.admin']
+      actions: ['[open] admin']
+    previous: {slot: 27, material: ARROW, name: '&ePrevious', actions: ['[previous-page]']}
+    next:     {slot: 35, material: ARROW, name: '&eNext', actions: ['[next-page]']}
+    close:    {slot: 31, material: BARRIER, name: '&cBack', actions: ['[back]']}
+  list-slots: ['10-16', '19-25']
+  templates:
+    open:
+      material: PAPER
+      name: '&e%quest%'
+      left-actions: ['[myplugin:claim] %id%', '[refresh]']
+      right-actions: ['[message] &7Quest id: %id%']
+    done:
+      material: 'head:Notch'
+      name: '&a%quest% &7(done)'
 ```
 
+### Item keys
+| Key | |
+|---|---|
+| `slot` / `slots` | `4`, or `[0, '10-16', '20,21']` |
+| `material` | any name from 1.8 to 26.x, `NAME:data`, numeric `id:data`, `minecraft:name`, or `head:<name\|texture\|url>` |
+| `amount`, `name`, `lore` | `name` and `lore` support `&` colours and `&#RRGGBB` (1.16+). A lore line that is just a list placeholder expands into several lines |
+| `glow`, `enchantments` | `glow: true`; `enchantments: ['SHARPNESS:2']` |
+| `flags` | `[HIDE_ATTRIBUTES, ...]` or `[ALL]`. Default: hide enchantments and attributes |
+| `head` | a player name, UUID, base64 texture or textures.minecraft.net URL |
+| `color` | leather armour: `'#FF0000'` or `'255,0,0'` |
+| `custom-model-data`, `item-model`, `unbreakable` | for versions that have them; ignored elsewhere |
+| `state`, `when-off` | when `state` is false (or set off in code), `when-off`'s keys replace the item's |
+| `view-requirements` | the item shows only if every line passes |
+| `click-requirements`, `deny-actions` | when a line fails, `deny-actions` run instead |
+| `actions` | also `left-`, `right-`, `shift-left-`, `shift-right-`, `middle-` and `drop-actions`. Each falls back to `actions` |
+| `always-show` | page buttons hide when there's no page to turn to, unless this is true |
 
-# Useful Methods:
+### Actions
+| Action | |
+|---|---|
+| `[command] <cmd>` | the viewer runs a command |
+| `[console] <cmd>` | the console runs a command |
+| `[message] <text>` / `[broadcast] <text>` | to the viewer / to everyone |
+| `[sound] <name> [volume] [pitch]` | any sound name from 1.8 to 26.x |
+| `[open] <menu> [args]` | opens another menu (args become `%arg_1%`...) |
+| `[back] [fallback menu]` | the previous menu; closes if there is none |
+| `[refresh]`, `[close]` | |
+| `[next-page]`, `[previous-page]`, `[page] <n>` | |
+| `[wait] <ticks>` | waits before running the rest |
+| `[plugin:action] <arg>` | registered by a plugin |
 
-## Creates the itemstack related to the data given. Optional Material argument to force a material if it has to be changed at time of creation.
-```Java
-ItemStack item = ItemBuilder.fromItemData(ItemData info, Material... forcedMaterial);
+### Requirements
+Each line can be:
+- `permission <node>`
+- a comparison `<a> <op> <b>`, where op is `==`, `!=`, `>=`, `<=`, `>` or `<`. Numbers compare as numbers; text compares ignoring case.
+- a plain value: `true`, `yes`, `on`, or a number other than 0 counts as passing.
+
+Start a line with `!` to negate it. Placeholders are filled in first.
+
+### Placeholders
+- Built in: `%player%`, `%page%`, `%pages%`, `%entries%` (`%entries_<list>%` for named `lists`), `%arg_1%`..., `%args%`.
+- Anything your provider sets.
+- PlaceholderAPI placeholders, when it's installed.
+
+## Single items
+```java
+ItemStack item = Materials.item("WOOL:14");              // red wool on every version
+ItemStack built = new ItemFactory(getLogger()).build(section, ItemFactory.PLAIN);
+boolean hex = Versions.isAtLeast(1, 16);                  // works with 26.x version numbers too
 ```
 
-## Retrieving the ItemData object from the given ItemStack:
-```Java
-ItemData data = ItemBuilder.dataFromItemStack(ItemStack);
-```
-
-## String utils (color, centered messages):
-```Java
-String coloredString = GeneralUtils.color(String); #Color string
-GeneralUtils.sendCenteredMessage(CommandSender, String); #Send normal message centered
-GeneralUtils.sendCenteredComponentMessage(Player, String, TextComponent); #Sends centered message that contains normal text + component at end of the string.
-```
-
-#
-A modified version of this class was used for material compatibility: https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XMaterial.java
+## Upgrading from 1.x
+`InventoryBuilder`, `InventoryHandler`, `ItemBuilder` and `ItemData` still work but are deprecated. They share one inventory per name and have no click handling.
+- The bundled `XMaterial` is gone: use XSeries' `com.cryptomorin.xseries.XMaterial` or `Materials`.
+- `GeneralUtils.getMCVersion()` now returns `100 + major` on 26.x, so `< 13` checks keep working.
