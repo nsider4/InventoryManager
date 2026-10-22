@@ -24,7 +24,7 @@ Your plugin supplies the data. Each server owner's YAML decides what the menu lo
 <dependency>
     <groupId>com.github.nsider4</groupId>
     <artifactId>InventoryManager</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
 </dependency>
 ```
 Shade it into your plugin and **relocate** both `org.nsider.inventorymanager` and `com.cryptomorin.xseries`, so plugins using different versions can't clash.
@@ -129,7 +129,7 @@ stats:
 | `[command] <cmd>` | the viewer runs a command |
 | `[console] <cmd>` | the console runs a command |
 | `[message] <text>` / `[broadcast] <text>` | to the viewer / to everyone |
-| `[sound] <name> [volume] [pitch]` | any sound name from 1.8 to 26.x |
+| `[sound] <name> [volume] [pitch]` | any sound name from 1.8 to 26.x, or a resource-pack sound like `myserver:ding` |
 | `[open] <menu> [args]` | opens another menu (args become `%arg_1%`...) |
 | `[switch] <menu> [args]` | like `[open]`, but `[back]` skips it (tabs) |
 | `[back] [fallback menu]` | the previous menu; closes if there is none |

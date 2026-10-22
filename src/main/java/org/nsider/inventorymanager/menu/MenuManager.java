@@ -46,7 +46,7 @@ import java.util.logging.Logger;
  * <pre>
  * [command] spawn             the viewer runs a command    [console] give %player% diamond 1
  * [message] &amp;aHi             to the viewer                 [broadcast] &amp;aHi everyone
- * [sound] UI_BUTTON_CLICK 1 1 any 1.8-26.x sound name    [open] menu-id [args...]
+ * [sound] UI_BUTTON_CLICK 1 1 any 1.8-26.x or resource-pack sound   [open] menu-id [args...]
  * [switch] menu-id [args...]  like open, but [back] skips this menu (tabs)
  * [back]                      the menu before (or closes)  [refresh]   [close]
  * [next-page] [previous-page] [page] 2                     [wait] 20   ticks before the rest run
@@ -421,14 +421,31 @@ public final class MenuManager {
 
     private void sound(Player player, String argument) {
         String[] parts = argument.split("\\s+");
-        Optional<XSound> sound = XSound.matchXSound(parts[0]);
-        if (!sound.isPresent() || !sound.get().isSupported()) {
-            logger.warning("Unknown sound '" + parts[0] + "' on this server version.");
-            return;
-        }
+        String name = parts[0];
         float volume = parts.length > 1 ? (float) decimal(parts[1], 1) : 1f;
         float pitch = parts.length > 2 ? (float) decimal(parts[2], 1) : 1f;
-        sound.get().play(player, volume, pitch);
+        Optional<XSound> sound = isVanilla(name) ? XSound.of(vanillaKey(name)) : Optional.empty();
+        if (sound.isPresent() && sound.get().isSupported()) {
+            sound.get().play(player, volume, pitch);
+            return;
+        }
+        // Any other name goes to the client as-is, so resource-pack sounds (myserver:ding) play too
+        try {
+            player.playSound(player.getLocation(), name, volume, pitch);
+        } catch (IllegalArgumentException e) {
+            logger.warning("Invalid sound '" + name + "'.");
+        }
+    }
+
+    /** No namespace, or minecraft:, is a vanilla sound that XSeries maps across versions. */
+    private static boolean isVanilla(String name) {
+        int namespace = name.indexOf(':');
+        return namespace < 0 || name.substring(0, namespace).equalsIgnoreCase("minecraft");
+    }
+
+    /** "minecraft:entity.player.levelup" -> "ENTITY_PLAYER_LEVELUP" */
+    private static String vanillaKey(String name) {
+        return name.substring(name.indexOf(':') + 1).replace('.', '_').toUpperCase(Locale.ROOT);
     }
 
     private static String key(String id) {

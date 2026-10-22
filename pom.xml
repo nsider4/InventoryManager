@@ -6,7 +6,7 @@
 
     <groupId>org.nsider</groupId>
     <artifactId>InventoryManager</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <packaging>jar</packaging>
 
     <name>InventoryManager</name>
